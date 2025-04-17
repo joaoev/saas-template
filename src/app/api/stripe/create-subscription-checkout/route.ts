@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
                 { price, quantity: 1 }],
             mode: "subscription",
             payment_method_types: ["card"],
-            success_url: `${req.headers.get("origin")}/sucess`,
+            success_url: `${req.headers.get("origin")}/success`,
             cancel_url: `${req.headers.get("origin")}/`,
             metadata,
             customer: customerId,

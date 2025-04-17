@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
                 { price, quantity: 1 }],
             mode: "payment",
             payment_method_types: ["card", "boleto"],
-            success_url: `${req.headers.get("origin")}/sucess`,
+            success_url: `${req.headers.get("origin")}/success`,
             cancel_url: `${req.headers.get("origin")}/`,
             ...(userEmail && {
                 customer_email: userEmail,

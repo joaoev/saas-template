@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import stripe from "@/app/lib/stripe";
+import { auth } from "@/app/lib/auth";
+import { getOrCreateCustomerId } from "@/app/server/stripe/get-customer-id";
 
 export async function POST(req: NextRequest) {
     const { testeId } = await req.json();
@@ -9,6 +11,16 @@ export async function POST(req: NextRequest) {
     if (!price) {
         return NextResponse.json({ error: "Price not found" }, { status: 500 });
     }
+
+    const session = await auth();
+    const userId = session?.user?.id;
+    const userEmail = session?.user?.email;
+
+    if (!userId || !userEmail) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const customerId = await getOrCreateCustomerId(userId, userEmail);
 
     const metadata = {
         testeId,
@@ -22,7 +34,8 @@ export async function POST(req: NextRequest) {
             payment_method_types: ["card"],
             success_url: `${req.headers.get("origin")}/sucess`,
             cancel_url: `${req.headers.get("origin")}/`,
-            metadata
+            metadata,
+            customer: customerId,
         });
 
         if (!session.url) {

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json("Session URL not found", { status: 500 });
         }
 
-        return NextResponse.json({ url: session.url });
+        return NextResponse.json({ sessionId: session.id }, { status: 200 });
     } catch (error) {
         console.error(error);
         return NextResponse.json("Error creating checkout session", { status: 500 });

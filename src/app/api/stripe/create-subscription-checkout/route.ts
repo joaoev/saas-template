@@ -24,6 +24,8 @@ export async function POST(req: NextRequest) {
 
     const metadata = {
         testeId,
+        price,
+        userEmail
     };
 
     try {
@@ -42,7 +44,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Session URL not found" }, { status: 500 });
         }
 
-        return NextResponse.json({ url: session.url });
+        return NextResponse.json({ id: session.id }, { status: 200 });
     } catch (error) {
         console.error("Error creating checkout session:", error);
         return NextResponse.json({ error: "Error creating checkout session" }, { status: 500 });
